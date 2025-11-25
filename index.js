@@ -32,12 +32,21 @@ connectToDB = async (connectionString) => {
 const user = process.env.MONGO_USER
 const password = process.env.MONGO_PASSWORD
 const host = process.env.MONGO_HOST
-const port = process.env.MONGO_PORT
+const mongoPort = process.env.MONGO_PORT
 const dbname = process.env.MONGO_DATABASE
+const port = 3001
 
-let db, connectionString = `mongodb://${user}:${password}@${host}:${port}/`
+let db, connectionString = `mongodb://${user}:${password}@${host}:${mongoPort}/${dbname}`;
 
-db = connectToDB(connectionString)
+(async () => {
+    db = await connectToDB(connectionString);
+})();
+
+app.get("/", async (req, res) => {
+    const articles = await (await db).collection('articles').find().toArray()
+    console.log(articles)
+    res.render("index", {articles: articles})
+})
 
 app.listen(port, () => {
     console.log(`On https://localhost:${port}`)
