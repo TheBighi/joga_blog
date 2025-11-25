@@ -15,6 +15,8 @@ app.engine("hbs", hbs.engine({
     layoutsDir: __dirname + "/views/layouts/"
 }))
 
+app.use(Express.static("public"))
+
 connectToDB = async (connectionString) => {
     try{
         const client = await mongodb.connect(connectionString)
