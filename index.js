@@ -48,6 +48,12 @@ app.get("/", async (req, res) => {
     res.render("index", {articles: articles})
 })
 
+app.get("/article/:slug", async (req, res) => {
+    const article = await (await db).collection("articles").findOne({slug: req.params.slug})
+    console.log(article)
+    res.render("article", {article: article})
+})
+
 app.listen(port, () => {
-    console.log(`On https://localhost:${port}`)
+    console.log(`On http://localhost:${port}`)
 })
